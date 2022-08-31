@@ -11,5 +11,9 @@ def create_db():
     con.commit()
     
     cur.execute("CREATE TABLE IF NOT EXISTS category(cid INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT)")
-    con.commit()    
+    con.commit()  
+   
+    
+    cur.execute("CREATE TABLE IF NOT EXISTS product(pid INTEGER PRIMARY KEY AUTOINCREMENT , category TEXT, supplier TEXT , name TEXT,price TEXT ,qty TEXT,status TEXT)")
+    con.commit()       
 create_db()
