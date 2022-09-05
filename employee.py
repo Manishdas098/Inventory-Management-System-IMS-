@@ -40,7 +40,7 @@ class employeeClass:
         cmb_search.current(0)
 
 
-        txt_search = Entry(searchFrame,textvariable=self.var_searchtxt, font=("Segoe UI" ,15,"bold"),bg="lightyellow")
+        txt_search = Entry(searchFrame,textvariable=self.var_searchtxt, font=("times new roman" ,15,"bold"),bg="lightyellow")
         txt_search.place(x=200,y=10)
         
         btn_search = Button(searchFrame ,text=("Search"),command=self.search ,font=("goudy old style" ,15,"normal"),bg="#4caf50",fg="white" ,cursor="hand2").place(x=410,y=9, width=150, height=30)
@@ -55,12 +55,12 @@ class employeeClass:
         lbl_gender =Label(self.root , text="Gender" ,font=("Segoe UI" , 15,"normal") , bg="white").place(x=350,y=150)  
         lbl_contact =Label(self.root , text="Contact" ,font=("Segoe UI" , 15,"normal") , bg="white").place(x=750,y=150)  
 
-        txt_empid =Entry(self.root ,bd=2,relief=GROOVE,textvariable=self.var_emp_id ,font=("Segoe UI" , 15,"normal") , bg="lightyellow").place(x=150,y=150,width=180)       
-        txt_gender =Entry(self.root ,bd=2,relief=GROOVE, textvariable=self.var_gender  ,font=("Segoe UI" , 15,"normal") , bg="lightyellow").place(x=500,y=150,width=180)  
-        cmb_gender=ttk.Combobox(self.root ,textvariable=self.var_gender,value=("Select","Male", "Female", "Other") , state="readonly", justify=CENTER,font=("Segoe UI" ,15))
+        txt_empid =Entry(self.root ,bd=2,relief=GROOVE,textvariable=self.var_emp_id ,font=("times new roman" , 15,"normal") , bg="lightyellow").place(x=150,y=150,width=180)       
+        txt_gender =Entry(self.root ,bd=2,relief=GROOVE, textvariable=self.var_gender  ,font=("times new roman" , 15,"normal") , bg="lightyellow").place(x=500,y=150,width=180)  
+        cmb_gender=ttk.Combobox(self.root ,textvariable=self.var_gender,value=("Select","Male", "Female", "Other") , state="readonly", justify=CENTER,font=("times new roman" ,15))
         cmb_gender.place(x=500 ,y=150,width=180)
         cmb_gender.current(0)     
-        txt_contact =Entry(self.root ,bd=2,relief=GROOVE,textvariable=self.var_contact,font=("Segoe UI" , 15,"normal") , bg="lightyellow").place(x=850,y=150,width=180)  
+        txt_contact =Entry(self.root ,bd=2,relief=GROOVE,textvariable=self.var_contact,font=("times new roman" , 15,"normal") , bg="lightyellow").place(x=850,y=150,width=180)  
 
 
 #====================row2=========================================#
@@ -68,9 +68,9 @@ class employeeClass:
         lbl_dob =Label(self.root , text="D.O.B" ,font=("Segoe UI" , 15,"normal") , bg="white").place(x=350,y=190)  
         lbl_doj =Label(self.root , text="D.O.J" ,font=("Segoe UI" , 15,"normal") , bg="white").place(x=750,y=190)  
 
-        txt_name =Entry(self.root ,bd=2,relief=GROOVE,textvariable=self.var_name ,font=("Segoe UI" , 15,"normal") , bg="lightyellow").place(x=150 ,y=190,width=180)      
-        txt_dob =Entry(self.root ,bd=2,relief=GROOVE, textvariable=self.var_dob  ,font=("Segoe UI" , 15,"normal") , bg="lightyellow").place(x=500 ,y=190,width=180)     
-        txt_doj =Entry(self.root ,bd=2,relief=GROOVE,textvariable=self.var_doj ,font=("Segoe UI" , 15,"normal") , bg="lightyellow").place(x=850,y=190,width=180)  
+        txt_name =Entry(self.root ,bd=2,relief=GROOVE,textvariable=self.var_name ,font=("times new roman" , 15,"normal") , bg="lightyellow").place(x=150 ,y=190,width=180)      
+        txt_dob =Entry(self.root ,bd=2,relief=GROOVE, textvariable=self.var_dob  ,font=("times new roman" , 15,"normal") , bg="lightyellow").place(x=500 ,y=190,width=180)     
+        txt_doj =Entry(self.root ,bd=2,relief=GROOVE,textvariable=self.var_doj ,font=("times new roman" , 15,"normal") , bg="lightyellow").place(x=850,y=190,width=180)  
 
 
 #====================row3=========================================#
@@ -78,9 +78,9 @@ class employeeClass:
         lbl_pass =Label(self.root , text="Password" ,font=("Segoe UI" , 15,"normal") , bg="white").place(x=350,y=230)  
         lbl_utype =Label(self.root , text="User Type" ,font=("Segoe UI" , 15,"normal") , bg="white").place(x=750,y=230)  
 
-        txt_email =Entry(self.root ,bd=2,relief=GROOVE,textvariable=self.var_email ,font=("Segoe UI" , 15,"normal") , bg="lightyellow").place(x=150 ,y=230,width=180)      
-        txt_pass =Entry(self.root ,bd=2,relief=GROOVE, textvariable=self.var_pass  ,font=("Segoe UI" , 15,"normal") , bg="lightyellow").place(x=500 ,y=230,width=180)     
-        cmb_utype=ttk.Combobox(self.root ,textvariable=self.var_utype,value=("Admin","Employee") , state="readonly", justify=CENTER,font=("Segoe UI" ,15))
+        txt_email =Entry(self.root ,bd=2,relief=GROOVE,textvariable=self.var_email ,font=("times new roman" , 15,"normal") , bg="lightyellow").place(x=150 ,y=230,width=180)      
+        txt_pass =Entry(self.root ,bd=2,relief=GROOVE, textvariable=self.var_pass  ,font=("times new roman" , 15,"normal") , bg="lightyellow").place(x=500 ,y=230,width=180)     
+        cmb_utype=ttk.Combobox(self.root ,textvariable=self.var_utype,value=("Admin","Employee") , state="readonly", justify=CENTER,font=("times new roman" ,15))
         cmb_utype.place(x=850,y=230,width=180)
         cmb_utype.current(0)  
 
@@ -91,9 +91,9 @@ class employeeClass:
         lbl_salary =Label(self.root , text="salary" ,font=("Segoe UI" , 15,"normal") , bg="white").place(x=500,y=270)  
     
 
-        self.txt_address =Text(self.root ,bd=2,relief=GROOVE ,font=("Segoe UI" , 15,"normal") , bg="lightyellow")
+        self.txt_address =Text(self.root ,bd=2,relief=GROOVE ,font=("times new roman" , 15,"normal") , bg="lightyellow")
         self.txt_address.place(x=150 ,y=270,width=300,height=60)      
-        txt_salary =Entry(self.root ,bd=2,relief=GROOVE, textvariable=self.var_salary  ,font=("Segoe UI" , 15,"normal") , bg="lightyellow").place(x=600,y=270,width=180)     
+        txt_salary =Entry(self.root ,bd=2,relief=GROOVE, textvariable=self.var_salary  ,font=("times new roman" , 15,"normal") , bg="lightyellow").place(x=600,y=270,width=180)     
 
 #================================buttons==============================#
 
@@ -178,6 +178,7 @@ class employeeClass:
                             ))
                             con.commit()
                             self.show()
+                            self.exit()
                             messagebox.showinfo("Success" , "employee details has been added successfully")
         except Exception as ex:
                 messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)
@@ -244,6 +245,7 @@ class employeeClass:
                             ))
                             con.commit()
                             self.show()
+                            self.exit()
                             messagebox.showinfo("Success" , "employee details has been added successfully")
         except Exception as ex:
                 messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)        
@@ -266,6 +268,7 @@ class employeeClass:
                                con.commit()
                                messagebox.showinfo('delete' , "employee deleted successfully", parent=self.root)
                                self.clear()
+                               self.exit()
                     
             except Exception as ex: 
                     messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)       
@@ -285,7 +288,7 @@ class employeeClass:
                 #    self.txt_address.insert(END ,row[9]),
                    self.var_salary.set("")
                    self.show()            
-        
+                   
           
     def search(self):    
               con = sqlite3.connect(database=r"Database/ims.db")
@@ -308,7 +311,8 @@ class employeeClass:
                         messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)   
                         
                         
-                        
+    def exit(self):
+            self.root.destroy()                      
                                   
 if __name__ == "__main__":
        

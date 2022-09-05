@@ -186,6 +186,7 @@ class productClass:
                             con.commit() 
                             self.show()
                             self.clear()
+                            self.exit()
                             messagebox.showinfo("Success" , "employee details has been added successfully")
         except Exception as ex:
                 messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)
@@ -244,6 +245,7 @@ class productClass:
                             con.commit()
                             self.show()
                             self.clear()
+                            self.exit()
                             messagebox.showinfo("Success" , "product details has been updated successfully")
         except Exception as ex:
                 messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)        
@@ -267,6 +269,7 @@ class productClass:
                                messagebox.showinfo('delete' , "product deleted successfully", parent=self.root)
                                self.clear()
                                self.show()
+                               self.exit()
                     
             except Exception as ex: 
                     messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)       
@@ -303,7 +306,9 @@ class productClass:
                                         messagebox.showerror("error" , "No record found")
               except Exception as ex:
                         messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)   
-                              
+  
+    def exit(self):
+            self.root.destroy()                              
 if __name__ == "__main__":
        
     root = Tk();

@@ -169,6 +169,7 @@ class supplierClass:
                             self.show()
                             self.clear()
                             messagebox.showinfo("Success" , "employee details has been added successfully")
+                            self.exit()
         except Exception as ex:
                 messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)
                 
@@ -200,6 +201,11 @@ class supplierClass:
             img = ImageTk.PhotoImage(Image.open(path1))
             panel = Label(sub, image = img, bd=4 , relief=GROOVE ,  bg="#0f4d7d")
             panel.pack( fill = "none", expand = "no" )
+            self.sales()
+            self.exit()
+            
+
+          
           
                         
         
@@ -248,7 +254,9 @@ class supplierClass:
                             ))
                             con.commit()
                             self.show()
+                            
                             messagebox.showinfo("Success" , "supplier details has been added successfully")
+                            self.exit()
         except Exception as ex:
                 messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)        
     def delete (self):
@@ -270,6 +278,7 @@ class supplierClass:
                                con.commit()
                                messagebox.showinfo('delete' , "supplier deleted successfully", parent=self.root)
                                self.clear()
+                               self.exit()
                     
             except Exception as ex: 
                     messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)       
@@ -303,7 +312,15 @@ class supplierClass:
                                 else:
                                         messagebox.showerror("error" , "No record found")
               except Exception as ex:
-                        messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)                
+                        messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root)
+                        
+                        
+                        
+    def exit(self):
+            self.root.destroy()  
+            
+            
+                            
 if __name__ == "__main__":
        
     root = Tk();
