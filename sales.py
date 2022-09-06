@@ -57,13 +57,13 @@ class salesClass:
      
     #  =============================Bill area ============================
         bill_list = Frame(self.root , bd=3 , relief=RIDGE)
-        bill_list.place(x=280,y=140,width=410,height=330)
+        bill_list.place(x=280,y=140,width=500,height=330)
 
         bill_title =Label(bill_list, text="Customer Bills Area" ,font=("goudy old style" , 20) , bg="orange").pack(side=TOP,fill=X) 
 
 
         scrolly2 = Scrollbar(bill_list,orient=VERTICAL)
-        self.txt_bill_area =Text(bill_list ,font=("times new roman"  , 15) ,bg="white",yscrollcommand=scrolly2.set)
+        self.txt_bill_area =Text(bill_list,bg="white",yscrollcommand=scrolly2.set)
         scrolly2.pack(side=RIGHT,fill=Y)
         scrolly2.config(command=self.txt_bill_area.yview)
         self.txt_bill_area.pack(fill=BOTH,expand=1)

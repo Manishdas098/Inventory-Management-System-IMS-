@@ -8,14 +8,21 @@ from PIL import Image,ImageTk
 import datetime
 from datetime import datetime, date
 import time
+from fpdf import FPDF as fp
 import sqlite3
 from time import strftime
 from tkinter import ttk,messagebox
 import sqlite3
 import os
 import PIL
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 from resizeimage import resizeimage
 import qrcode 
+
 import tempfile
 
 
@@ -36,6 +43,8 @@ class BillClass:
         self.var_searchtxt = StringVar()
         self.var_name = StringVar()
         self.var_contact = StringVar()
+        self.var_discount = StringVar()
+        self.var_email = StringVar()
 
 #title#
         self.icon_title= PhotoImage(file="images/logo1.png")
@@ -53,7 +62,7 @@ class BillClass:
         
         
         productFrame = Frame(self.root, bd=4 , relief=RIDGE , bg="white")
-        productFrame.place(x=10, y=106, width=410, height=550)
+        productFrame.place(x=10, y=106, width=410, height=690)
         
         p_title = Label(productFrame, text="All Product" , font=("times new roman" , 20 , "bold"),bg="#262626" ,fg="white").pack(fill=X ,side=TOP)
         
@@ -74,7 +83,7 @@ class BillClass:
    
 # ================================= Treeview =====================================
         productFrame3 = Frame(productFrame , bd=3, relief=RIDGE)
-        productFrame3.place(x=2 , y=140, width=398,height=385)
+        productFrame3.place(x=2 , y=140, width=398,height=510)
         
         scrolly = Scrollbar(productFrame3,orient=VERTICAL)
         scrollx = Scrollbar(productFrame3,orient=HORIZONTAL)
@@ -107,25 +116,31 @@ class BillClass:
         self.productTable.bind("<ButtonRelease-1>",self.get_data)
         self.productTable["show"]="headings"
         self.show()
-        
+        lbl_0 = Label(productFrame ,text="Note:Enter '0'Quantity to remove the product from cart",bg="white", fg="red", font=("times new roman",13 )).place(x=5 , y=650)
+       
         
         
         customerFrame = Frame(self.root, bd=4 , relief=RIDGE , bg="white")
-        customerFrame.place(x=420, y=110, width=530, height=70)
+        customerFrame.place(x=420, y=110, width=570, height=140)
         
         p_title = Label(customerFrame, text="Customer Details" , font=("times new roman" , 15 , "bold"),bg="#262626" ,fg="lightgrey").pack(fill=X ,side=TOP)
         lbl_name = Label(customerFrame ,text="Name",bg="white", font=("times new roman",15 )).place(x=5 , y=35)
         txt_name = Entry(customerFrame ,bg="lightyellow",textvariable=self.var_name, font=("times new roman" , 12 )).place(x=80 , y=35 )
         # btn_search = Button(customerFrame,text="Search" , bg="#2196f3" ,command=self.search,fg="white",cursor="hand2", font=("times new roman" , 15 , "bold")).place(x=285 , y=45,width=100,height=25)
-        
-        
+
+        txt_name = Entry(customerFrame ,bg="lightyellow",textvariable=self.var_name, font=("times new roman" , 12 )).place(x=80 , y=35 ) 
         
         lbl_Contact_no = Label(customerFrame ,text="Contact no.",bg="white", font=("times new roman",15 )).place(x=270 , y=35)
         txt_Contact_no = Entry(customerFrame ,bg="lightyellow",textvariable=self.var_contact, font=("times new roman" , 12 )).place(x=380 , y=35 , width=130)
-    
+        
+        lbl_discount= Label(customerFrame ,text="Discount",bg="white", font=("times new roman",15 )).place(x=5 , y=70)
+        txt_discount = Entry(customerFrame ,bg="lightyellow",textvariable=self.var_discount, font=("times new roman" , 12 )).place(x=80 , y=70 )
      
+        lbl_email_no = Label(customerFrame ,text="email",bg="white", font=("times new roman",15 )).place(x=270 , y=70)
+        txt_email_no = Entry(customerFrame ,bg="lightyellow",textvariable=self.var_email, font=("times new roman" , 12 )).place(x=380 , y=70 , width=130)
+        
         Cal_cart_Frame = Frame(self.root, bd=2, relief=RIDGE , bg="white")
-        Cal_cart_Frame.place(x=420, y=190, width=530, height=360)
+        Cal_cart_Frame.place(x=420, y=230, width=570, height=360)
         
         # ==================== calculator frame ==========================#
         
@@ -159,7 +174,7 @@ class BillClass:
         
         # =============================All fungtion============================#         
         cart_Frame = Frame(Cal_cart_Frame , bd=3, relief=RIDGE)
-        cart_Frame.place(x=280 , y=8, width=245,height=342)
+        cart_Frame.place(x=280 , y=8, width=285,height=342)
         
         self.cart_titles = Label(cart_Frame , text=("cart \t Total items[0]"), font=("times new roman" , 15) ,bg="lightgrey")
         self.cart_titles.pack(side=TOP , fill=X)
@@ -199,7 +214,7 @@ class BillClass:
      
     #  ======================Add cart button ========================#
         cart_btn_Frame = Frame(self.root, bd=4 , relief=RIDGE , bg="white")
-        cart_btn_Frame.place(x=420, y=550, width=530, height=109)
+        cart_btn_Frame.place(x=420, y=590, width=570, height=109)
         # variable
         
         self.var_pid = StringVar()
@@ -207,6 +222,7 @@ class BillClass:
         self.price = StringVar()
         self.qty = StringVar()
         self.instock = StringVar()
+        
         
         
         lbl_p_name = Label(cart_btn_Frame , text="Product Name" , font=("times new roman" , 15 ) , bg="white" ).place(x=5 ,y=5)
@@ -229,7 +245,7 @@ class BillClass:
 # =========================================== billing area =================================
 
         self.billFrame= Frame (self.root , bd=2 , relief=RIDGE , bg="white")
-        self.billFrame.place(x=953,y=110,height=410, width=500)
+        self.billFrame.place(x=993,y=110,height=410, width=500)
         b_title = Label(self.billFrame, text="Bill Area" , font=("times new roman" , 20 , "bold"),bg="orange" ,fg="white").pack(fill=X ,side=TOP)
         
         scrolly = Scrollbar(self.billFrame ,orient=VERTICAL)
@@ -242,15 +258,16 @@ class BillClass:
  
 
         self.billmenu= Frame(self.root , bd=2 , relief=RIDGE , bg="white")
-        self.billmenu.place(x=953,y=520,height=140, width=410)
+        self.billmenu.place(x=993,y=520,height=140, width=410)
         
         self.lbl_amount = Label(self.billmenu ,text="Total Amount\n₹ 0", font=("times new roman" , 15,"bold") , bg="#3551b4", fg="white")
         self.lbl_amount.place(x=2,y=5,width=120 , height=70)
         
         
-        self.lbl_discound = Label(self.billmenu ,text="Discount\n 5%", font=("times new roman" , 15,"bold") , bg="#8bc34a", fg="white")
-        self.lbl_discound.place(x=124,y=5,width=120 , height=70)
-        
+        lbl_discound = Label(self.billmenu ,text="Discount\n"+str(self.var_discount.get()), font=("times new roman" , 15,"bold") , bg="#8bc34a", fg="white")
+        lbl_discound.config(text="Discount\n"+str(self.var_discount.get()))
+        lbl_discound.place(x=124,y=5,width=120 , height=70)
+     
         
         self.lbl_net_pay = Label(self.billmenu ,text="Net pay\n₹ 0", font=("times new roman" , 15,"bold") , bg="#607d8b", fg="white")
         self.lbl_net_pay.place(x=246,y=5,width=160 , height=70)
@@ -272,23 +289,25 @@ class BillClass:
             if self.qty.get()=="" :
                 messagebox.showerror("error" , "please enter a quantity")
             elif self.var_pid.get() == "":
-                    messagebox.showerror("error" , "plese select a product")       
+                    messagebox.showerror("error" , "plese select a product")                                  
+            elif int(self.qty.get()) > int(self.instock.get()):
+                    messagebox.showerror("error" , "invalid quantity")
             else:
-                # price_cal =(int(self.qty.get())*float(self.price.get()))
-                # price_cal = float(price_cal)
-                
+              
                 price_cal =self.price.get()
               
                 self.cart_data =[self.var_pid.get(),self.pname.get(),price_cal,self.qty.get() , self.instock.get()]
-            
 
                 present ="no"
                 index_=0
                 for row in self.cart_list:
+        
                         if self.var_pid.get()==row[0]:
                                 present='yes'
                                 break
                         index_+=1
+                
+                
                 if  present == 'yes':
                      op = messagebox.askyesno('confirm' , "item atem is present \n do you want to update" , parent=self.root)
                      if op==True:
@@ -302,6 +321,10 @@ class BillClass:
                         self.cart_list.append(self.cart_data)
                 self.show_cart()
                 self.bill_update()
+              
+#     def what_msg(self):
+#             pywhatkit.sendwhatmsg("+919833715839" , "its an automatic massage" , )
+           
      
     def show_cart(self):
         try:    
@@ -333,7 +356,7 @@ class BillClass:
                 con = sqlite3.connect(database=r"Database/ims.db")
                 cur = con.cursor()
                 try:
-                        cur.execute("select pid , name , price , qty , status from product")
+                        cur.execute("select pid , name , price , qty from product where status='Active'")
                         rows=cur.fetchall()
                         self.productTable.delete(*self.productTable.get_children())
                         for row in rows:
@@ -402,6 +425,7 @@ class BillClass:
                                      for row in rows:
                                        self.productTable.insert('' , END , values =row)
                                 else:
+                
                                         messagebox.showerror("error" , "No record found")
               except Exception as ex:
                         messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root) 
@@ -419,19 +443,64 @@ class BillClass:
                 self.bill_middle() 
                 self.bill_bottom()
                 self.bill_tax()
-                fp =open(f"Bills/{str(self.invoice)}.txt" , "w", encoding='utf-8') 
-                # fp.write(self.txt_bill_area.get('1.0',END))
-                fp.write((self.txt_bill_area.get('1.0',END)))
-                fp.close()
+                self.fp =open(f"Bills/{str(self.invoice)}.txt" , "w", encoding='utf-8') 
+         
+                # self.file_name = self.fp2
+                # self.fp.write(self.txt_bill_area.get('1.0',END))
+                self.fp.write((self.txt_bill_area.get('1.0',END)))
+                self.fp.close()
+                self.send_email()
+                
                
-                    
+    def send_email(self):
+        #     sender_pass = 'snwh byba yobk nfcj'
+            fromaddr = 'manishdas20129@gmail.com'
+            password = 'snwh byba yobk nfcj'
+            toaddr =  str(self.var_email.get())
+            
+            msg = MIMEMultipart()
+
+
+            msg['From'] = fromaddr
+            msg['To'] = toaddr
+            msg['Subject'] = "hii this is mail"
+
+            body = "Thanks for visiting & vist again"
+
+            msg.attach(MIMEText(body, 'plain'))
+
+        #     filename = 'Q:/Inventory Manegment System/Bills/'+str(self.invoice)+'.txt'
+            filename = 'Q:/Inventory Manegment System/invoice/Manish Das.pdf'
+            attachment = open(filename, "rb")
+
+            p = MIMEBase('application', 'octet-stream')
+
+            p.set_payload((attachment).read())
+
+            encoders.encode_base64(p)
+
+            p.add_header('Content-Disposition', "attachment" ,filename= filename)
+
+            msg.attach(p)
+
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server.login(fromaddr,password)
+
+# Converts the Multipart msg into a string
+            text = msg.as_string()
+
+            server.send_message(msg)
+
+            server.quit()
+     
     def bill_top(self):
         self.invoice=int(time.strftime("%H%M%S"))+int(time.strftime("%d%m%Y"))
-
+    
+   
         bill_top_temp=f'''
-
-\t\t      
-\t\t      𓂀 India Mart 𓂀 
+\t\t     
+\t\t      Manish Mart
 \t\t    
  Phone No. 98725*** ,\t\t\t\tMumbai-125001
 {str("="*59)}
@@ -454,6 +523,7 @@ Net Pay\t\t\t\t\t\t₹{float(self.net_pay)}
 {str("="*59)}
 \t\t\t\t      Total ₹{self.net_pay}
 
+{str("="*59)}
 Name\t\tTaxable\t\tTax\t\tNet Amount
 {str("="*59)}
         ''' 
@@ -462,9 +532,9 @@ Name\t\tTaxable\t\tTax\t\tNet Amount
 
         self.txt_bill_area.insert(END,bill_bottom_temp)   
     
-               
-        print
-    def bill_tax(self):
+     
+    def bill_tax(self):        
+            
         for row in self.cart_list:    
            name=row[1]
            rate = float(row[2])-float(row[2])*5/100
@@ -484,28 +554,48 @@ Name\t\tTaxable\t\tTax\t\tNet Amount
            price= float(taxable)+float(cgst)+float(sgst)
            price = "{:.2f}".format(price)
            price = str(price)
-           print (price, tax_perc)
            thx_for_vist =f'''
-
+           
+ 
 {str("="*59)}           
 \t      ***🙂Thanks for Visiting Us🙂***\t\t
         '''    
            self.txt_bill_area.insert(END,'\n'+name+"\t\t"+taxable+"\t"'\t₹'+tax+"\t\t"+price+"\t") 
         self.txt_bill_area.insert(END,thx_for_vist) 
     def bill_middle(self):
-        for row in self.cart_list:
-            name=row[1]
-            qty=row[3]
-            ogprice= row[2]
-            rate = float(row[2])-float(row[2])*5/100
-            rate = "{:.2f}".format(rate)
-            rate = str(rate)
-            price=float(rate)*float(row[3])
-            price=str(price)
-            self.tax = float(price)*9/100
-            self.txt_bill_area.insert(END,"\n"+name+"\t\t   "+qty+"\t₹"+ogprice+'\t₹'+rate+"\t\t₹"+price)
-            print(rate)
-            
+        con = sqlite3.connect(database=r"Database/ims.db")
+        cur = con.cursor()
+        try:
+                       
+          for row in self.cart_list:
+
+               
+               name=row[1]
+               qty=int(row[4])-int(row[3])
+               if int(row[3])==int(row[4]):
+                       status = "inActive"
+               if int(row[3])!=int(row[4]):
+                       status = "Active"
+                  
+               pid = row[0]        
+               ogprice= row[2]
+               rate = float(row[2])-float(row[2])*5/100
+               rate = "{:.2f}".format(rate)
+               rate = str(rate)
+               price=float(rate)*float(row[3])
+               price=str(price)
+               self.tax = float(price)*9/100
+               self.txt_bill_area.insert(END,"\n"+name+"\t\t   "+row[3]+"\t₹"+ogprice+'\t₹'+rate+"\t\t₹"+price)
+               cur.execute('Update product set qty=?,status=? where pid=?',(
+                       qty,
+                       status,
+                       pid
+               )) 
+               con.commit()
+          con.close()
+          self.show() 
+        except Exception as ex:
+                messagebox.showerror("Error",f"error due to : {str(ex)}",parent=self.root) 
             
             
 
@@ -514,10 +604,24 @@ Name\t\tTaxable\t\tTax\t\tNet Amount
     
     def clear_bill(self):
             self.txt_bill_area.delete('1.0', END)
+            self.txt_to_pdf()
     
-    
-            
+#     def txt_to_pdf(self):
+#         file1 = open("Q:/Inventory Manegment System/Bills/Manish.txt","r+")  
+#         paragraph=file1
+#         txtPdf=fp()
+#         txtPdf.add_page()
+        
+#         ct=1
+#         for para in paragraph:
+#              txtPdf.cell(200,10,txt=paragraph,ln=ct,align="C")
+#              ct+=1
+#              txtPdf.output()
+
+                
     def clock(self):
+        self.hours= time.strftime("%H")
+        self.minutes= time.strftime("%M")
         self.time= time.strftime(" %I:%M:%S")    
         self.year = time.strftime(" %d:%m:%Y")    
         self.lbl_clock.config(text="Wellcome to Inventory Managment System\t\t Date "+self.year  +"\t\t Time"+self.time+"", font=("times new roman" , 15 , "bold"),bg="#4d636d" ,fg="white")
@@ -526,7 +630,8 @@ Name\t\tTaxable\t\tTax\t\tNet Amount
     def print_bill (self):
             new_file =tempfile.mktemp('.txt')
             open(new_file, "w",encoding="utf-8").write(self.txt_bill_area.get('1.0' , END))
-            os.startfile(new_file,"print","man")
+            os.startfile(new_file,"print")
+           
     def get_input(self,num):
             xnum= self.txt_cal_num.get()+str(num)
             self.txt_cal_num.set(xnum)
